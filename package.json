@@ -1,5 +1,5 @@
 {
-  "name": "react-template",
+  "name": "chuusen-simulator",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -34,6 +34,7 @@
     "@ark-ui/react": "^5.18.3",
     "@pandacss/dev": "^1.0.0",
     "@park-ui/panda-preset": "^0.43.1",
+    "@sentry/react": "^10.8.0",
     "@stdlib/stats-base-dists-lognormal": "^0.2.2",
     "i18next": "^25.3.2",
     "mathjs": "^14.6.0",
