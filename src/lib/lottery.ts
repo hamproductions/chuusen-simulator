@@ -6,6 +6,7 @@ export interface LotteryInput {
   numChannels: number;
   numSimulations: number;
   yourBallots: number;
+  yourNumAccounts: number;
 }
 
 export interface WinnerProfile {

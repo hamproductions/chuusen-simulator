@@ -61,14 +61,15 @@ This section summarizes the key aspects of the project and user preferences, and
 ### Lottery Simulator:
 
 *   **Inputs:** Total Ballots Sold, Number of Winners, Average Ballots per Person, Log-normal Distribution Mean (μ), Log-normal Distribution Standard Deviation (σ), Number of Channels, Number of Simulation Runs.
-*   **Ballot Distribution:** Modeled using a log-normal distribution. The total ballot pool is precisely adjusted to `totalBallots` after generation.
-*   **"Win Once" Rule:** A person can only win once per simulation run.
-*   **Outputs:** Probability of Winning, Winner Profile (distribution graph), Ballots per Winner (avg, median, mode), Channel Analysis (placeholder).
+*   **Ballot Distribution:** Modeled using a log-normal distribution to simulate realistic, skewed distributions of ballots per person. The total ballot pool is precisely adjusted to `totalBallots` after generation.
+*   **"Win Once" Rule:** For all participants except "you," the "Win Once" rule applies (one win per person per simulation run). For "you," multiaccounting is supported: `yourBallots` are split evenly among `yourNumAccounts` (each acting as a distinct entity). Each of these "accounts" can win once per simulation run, and once an account wins, it is eliminated from the pool for subsequent draws within that run. There is no upper limit on `yourNumAccounts` as long as it doesn't exceed the total number of ballots you have.
+*   **Outputs:** Probability of Winning, Winner Profile (distribution graph), Ballots per Winner (avg, median, mode), Channel Analysis (future feature/placeholder).
 *   **UI:** Built with Park UI components. Input values are persisted using `useLocalStorage`.
 *   **Visualizations:** `recharts` library is used for charting.
     *   Winner Profile: Bar chart.
     *   Winning Probability: Bar chart.
     *   Log-normal Distribution: Line chart (updates in real-time with input changes).
+*   **Simulation Execution:** The core simulation logic runs in a web worker (`src/worker/lottery-worker.ts`) to prevent UI blocking and ensure responsiveness.
 *   **Simulation Trigger:** Main simulation results update on "Run Simulation" button click. Only the Log-normal Distribution chart updates in real-time with input changes.
 
 ## User Preferences:

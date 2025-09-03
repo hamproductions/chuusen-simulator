@@ -24,7 +24,8 @@ const defaultInputs: LotteryInput = {
   stdDev: 3,
   numChannels: 1,
   numSimulations: 10000,
-  yourBallots: 1
+  yourBallots: 1,
+  yourNumAccounts: 1 // Added
 };
 
 export function LotterySimulator() {
@@ -209,6 +210,16 @@ export function LotterySimulator() {
                   min={1}
                   value={String(currentInputs.yourBallots)}
                   onValueChange={(e) => handleInputChange('yourBallots', e.valueAsNumber)}
+                  disabled={isLoading}
+                />
+              </Field.Root>
+              <Field.Root>
+                <Field.Label>{t('lotterySimulator.form.yourNumAccounts')}</Field.Label>
+                <NumberInput
+                  min={1}
+                  max={currentInputs.yourBallots} // Max is yourBallots
+                  value={String(currentInputs.yourNumAccounts)}
+                  onValueChange={(e) => handleInputChange('yourNumAccounts', e.valueAsNumber)}
                   disabled={isLoading}
                 />
               </Field.Root>

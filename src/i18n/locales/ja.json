@@ -61,6 +61,7 @@
       "numberOfChannels": "チャンネル数",
       "numberOfSimulationRuns": "シミュレーション実行回数",
       "yourBallots": "あなたの投票数",
+      "yourNumAccounts": "あなたのアカウント数",
       "cancelSimulation": "シミュレーションをキャンセル",
       "runningSimulation": "シミュレーション実行中"
     },

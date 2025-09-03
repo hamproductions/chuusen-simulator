@@ -61,6 +61,7 @@
       "numberOfChannels": "Number of Channels",
       "numberOfSimulationRuns": "Number of Simulation Runs",
       "yourBallots": "Your Ballots",
+      "yourNumAccounts": "Your Number of Accounts",
       "cancelSimulation": "Cancel Simulation",
       "runningSimulation": "Running Simulation"
     },

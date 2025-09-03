@@ -35,7 +35,8 @@ export const runLotterySimulation = (input: LotteryInput): Promise<LotteryResult
       stdDev,
       numSimulations,
       yourBallots,
-      numChannels
+      numChannels,
+      yourNumAccounts // Add this
     } = input;
 
     const allWinnerBallots: number[] = [];
@@ -55,6 +56,8 @@ export const runLotterySimulation = (input: LotteryInput): Promise<LotteryResult
         resolve({} as LotteryResult); // Resolve the promise immediately on cancellation
         return;
       }
+      // Reset yourWinsInCurrentSimulationChannel for each simulation run
+      const yourWinsInCurrentSimulationChannel: { [channelIndex: number]: number } = {};
       for (let channelIndex = 0; channelIndex < numChannels; channelIndex++) {
         const channelTotalBallots = Math.floor(totalBallots / numChannels);
         const channelNumWinners = Math.floor(numWinners / numChannels);
@@ -76,14 +79,27 @@ export const runLotterySimulation = (input: LotteryInput): Promise<LotteryResult
 
         const people: { id: number; ballots: number }[] = [];
         const peopleMap = new Map<number, { id: number; ballots: number }>();
-        let yourId: number | null = null;
+        let yourId: number | null = null; // This will still be the main 'yourId' (-1)
 
-        // Add 'You' as a participant to each channel with a portion of your ballots
+        // Add 'You' as a participant with multiple accounts to each channel
         if (yourBallotsInChannel > 0) {
-          yourId = -1; // Unique ID for 'You'
-          const you = { id: yourId, ballots: yourBallotsInChannel };
-          people.push(you);
-          peopleMap.set(yourId, you);
+          yourId = -1; // Main unique ID for 'You'
+          const baseBallotsPerYourAccount = Math.floor(yourBallotsInChannel / yourNumAccounts);
+          let remainderYourBallotsForAccounts = yourBallotsInChannel % yourNumAccounts;
+
+          for (let k = 0; k < yourNumAccounts; k++) {
+            const accountId = -(1000 + k); // Unique ID for each of your accounts (e.g., -1000, -1001, ...)
+            const ballotsForThisAccount =
+              baseBallotsPerYourAccount + (remainderYourBallotsForAccounts > 0 ? 1 : 0);
+            if (remainderYourBallotsForAccounts > 0) {
+              remainderYourBallotsForAccounts--;
+            }
+            if (ballotsForThisAccount > 0) {
+              const accountPerson = { id: accountId, ballots: ballotsForThisAccount };
+              people.push(accountPerson);
+              peopleMap.set(accountId, accountPerson);
+            }
+          }
         }
 
         for (let j = 0; j < numPeopleInChannel; j++) {
@@ -116,20 +132,40 @@ export const runLotterySimulation = (input: LotteryInput): Promise<LotteryResult
           }
         }
 
-        const winners = new Set<number>();
+        const winners = new Set<number>(); // This set will store unique person IDs (including the main yourId if any of its accounts win)
+        const yourWonAccountSubIdsInChannel = new Set<number>(); // Track which of your accounts have won in this channel
         let attempts = 0;
         while (winners.size < channelNumWinners && attempts < ballotPool.length * 2) {
           const winningBallotIndex = Math.floor(Math.random() * ballotPool.length);
-          const winnerId = ballotPool[winningBallotIndex];
-          if (!winners.has(winnerId)) {
-            winners.add(winnerId);
-            if (yourId !== null && winnerId === yourId) {
-              overallYouWonCount++;
+          const winnerId = ballotPool[winningBallotIndex]; // This can now be a sub-ID for 'you'
+
+          if (yourId !== null && winnerId < 0) {
+            // Check if it's one of 'your' account IDs (negative IDs)
+            // Special handling for 'yourId's accounts
+            if (!yourWonAccountSubIdsInChannel.has(winnerId)) {
+              yourWonAccountSubIdsInChannel.add(winnerId); // Mark this specific account as won
+              overallYouWonCount++; // Increment overall count for each of your winning accounts
+              // Add the main yourId to the 'winners' Set only if it's the first win for 'you' in this channel
+              if (!winners.has(yourId)) {
+                winners.add(yourId);
+              }
+              const winner = peopleMap.get(winnerId); // Get the account person
+              if (winner) {
+                // Use the original yourId's ballots for allWinnerBallots and winCounts
+                // The original yourId (-1) is not in peopleMap anymore, so we need to use yourBallots
+                allWinnerBallots.push(yourBallots); // Assuming yourBallots is the total for you
+                winCounts[yourBallots] = (winCounts[yourBallots] || 0) + 1;
+              }
             }
-            const winner = peopleMap.get(winnerId);
-            if (winner) {
-              allWinnerBallots.push(winner.ballots);
-              winCounts[winner.ballots] = (winCounts[winner.ballots] || 0) + 1;
+          } else {
+            // Standard "Win Once" rule for others
+            if (!winners.has(winnerId)) {
+              winners.add(winnerId);
+              const winner = peopleMap.get(winnerId);
+              if (winner) {
+                allWinnerBallots.push(winner.ballots);
+                winCounts[winner.ballots] = (winCounts[winner.ballots] || 0) + 1;
+              }
             }
           }
           attempts++;
@@ -137,8 +173,7 @@ export const runLotterySimulation = (input: LotteryInput): Promise<LotteryResult
         // Aggregate channel analysis per simulation run
         channelAnalysis[channelIndex] = {
           youWonCount:
-            (channelAnalysis[channelIndex]?.youWonCount || 0) +
-            (yourId !== null && winners.has(yourId) ? 1 : 0),
+            (channelAnalysis[channelIndex]?.youWonCount || 0) + yourWonAccountSubIdsInChannel.size, // Use the count of your winning accounts
           totalWinners: (channelAnalysis[channelIndex]?.totalWinners || 0) + winners.size
         };
       }
