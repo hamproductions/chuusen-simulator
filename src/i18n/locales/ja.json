@@ -60,7 +60,9 @@
       "standardDeviation": "標準偏差 (σ)",
       "numberOfChannels": "チャンネル数",
       "numberOfSimulationRuns": "シミュレーション実行回数",
-      "yourBallots": "あなたの投票数"
+      "yourBallots": "あなたの投票数",
+      "cancelSimulation": "シミュレーションをキャンセル",
+      "runningSimulation": "シミュレーション実行中"
     },
     "results": {
       "distributionVisualized": "分布の可視化",
@@ -86,7 +88,9 @@
       "channelAnalysis": "チャンネル分析",
       "channel": "チャンネル {{index}}",
       "yourWins": "あなたの当選: {{count}}",
-      "totalWinners": "総当選者: {{count}}"
+      "totalWinners": "総当選者: {{count}}",
+      "applicantDistribution": "参加分配",
+      "percentage": "パーセンテージ"
     }
   }
 }

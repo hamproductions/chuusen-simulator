@@ -60,7 +60,9 @@
       "standardDeviation": "Standard Deviation (σ)",
       "numberOfChannels": "Number of Channels",
       "numberOfSimulationRuns": "Number of Simulation Runs",
-      "yourBallots": "Your Ballots"
+      "yourBallots": "Your Ballots",
+      "cancelSimulation": "Cancel Simulation",
+      "runningSimulation": "Running Simulation"
     },
     "results": {
       "distributionVisualized": "Distribution Visualized",
@@ -86,7 +88,9 @@
       "channelAnalysis": "Channel Analysis",
       "channel": "Channel {{index}}",
       "yourWins": "Your wins: {{count}}",
-      "totalWinners": "Total winners: {{count}}"
+      "totalWinners": "Total winners: {{count}}",
+      "applicantDistribution": "Applicant Distribution",
+      "percentage": "Percentage"
     }
   }
 }

@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { WinnerProfileChart } from './WinnerProfileChart';
 import { WinningProbabilityChart } from './WinningProbabilityChart';
 import { ProbabilityRateOfChangeChart } from './ProbabilityRateOfChangeChart';
 import { LogNormalDistributionChart } from './LogNormalDistributionChart';
+import { ApplicantDistributionChart } from './ApplicantDistributionChart';
 import { Button } from '~/components/ui/button';
 import { Field } from '~/components/ui/field';
 import { Fieldset } from '~/components/ui/fieldset';
@@ -11,17 +12,16 @@ import { NumberInput } from '~/components/ui/number-input';
 import { Heading } from '~/components/ui/heading';
 import { Box, HStack, Stack } from 'styled-system/jsx';
 import type { LotteryInput, LotteryResult } from '~/lib/lottery';
-import { runLotterySimulation } from '~/lib/lottery';
 import { Spinner } from '~/components/ui/spinner';
 import { Text } from '~/components/ui/text';
 import { useLocalStorage } from '~/hooks/useLocalStorage';
 import { Badge } from '~/components/ui/badge';
 
 const defaultInputs: LotteryInput = {
-  totalBallots: 1000000,
-  numWinners: 100,
-  avgBallotsPerPerson: 10,
-  stdDev: 1.5,
+  totalBallots: 20000,
+  numWinners: 9000,
+  avgBallotsPerPerson: 5,
+  stdDev: 3,
   numChannels: 1,
   numSimulations: 10000,
   yourBallots: 1
@@ -35,26 +35,85 @@ export function LotterySimulator() {
   );
   const [result, setResult] = useState<LotteryResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [simulationProgress, setSimulationProgress] = useState(0);
 
   const currentInputs = inputs ?? defaultInputs;
+
+  const workerRef = useRef<Worker | null>(null);
 
   const handleInputChange = (field: keyof LotteryInput, value: number) => {
     setInputs((prev) => ({ ...(prev ?? defaultInputs), [field]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (workerRef.current) {
+      workerRef.current.terminate();
+      workerRef.current = null;
+    }
+
     setIsLoading(true);
     setResult(null);
-    try {
-      const res = await runLotterySimulation(currentInputs);
-      setResult(res);
-    } catch (error) {
-      console.error('Simulation failed:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    setSimulationProgress(0);
+
+    const newWorker = new Worker(new URL('~/worker/lottery-worker.ts', import.meta.url), {
+      type: 'module'
+    });
+    workerRef.current = newWorker;
+
+    newWorker.onmessage = (event: MessageEvent) => {
+      const { type, result, message, value } = event.data;
+      if (type === 'success') {
+        setResult(result);
+        setTimeout(() => {
+          setIsLoading(false);
+          setSimulationProgress(0);
+        }, 500);
+      } else if (type === 'error') {
+        console.error('Worker error:', message);
+        setTimeout(() => {
+          setIsLoading(false);
+          setSimulationProgress(0);
+        }, 500);
+      } else if (type === 'progress') {
+        setSimulationProgress(value);
+      } else if (type === 'cancelled') {
+        setTimeout(() => {
+          setIsLoading(false);
+          setSimulationProgress(0);
+        }, 500);
+        console.log('Simulation cancelled by user.');
+      }
+    };
+
+    newWorker.onerror = (error) => {
+      console.error('Worker encountered an error:', error);
+      setTimeout(() => {
+        setIsLoading(false);
+        setSimulationProgress(0);
+      }, 500);
+    };
+
+    newWorker.postMessage({ type: 'run', input: currentInputs });
   };
+
+  const handleCancel = () => {
+    if (workerRef.current) {
+      workerRef.current.postMessage({ type: 'cancel' });
+    }
+    setIsLoading(false);
+    setSimulationProgress(0);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (workerRef.current) {
+        workerRef.current.terminate();
+        workerRef.current = null;
+      }
+    };
+  }, []);
 
   return (
     <Box p={{ base: '4', md: '6' }}>
@@ -76,6 +135,7 @@ export function LotterySimulator() {
                   min={1}
                   value={String(currentInputs.totalBallots)}
                   onValueChange={(e) => handleInputChange('totalBallots', e.valueAsNumber)}
+                  disabled={isLoading}
                 />
               </Field.Root>
               <Field.Root>
@@ -84,6 +144,7 @@ export function LotterySimulator() {
                   min={1}
                   value={String(currentInputs.numWinners)}
                   onValueChange={(e) => handleInputChange('numWinners', e.valueAsNumber)}
+                  disabled={isLoading}
                 />
               </Field.Root>
               <Field.Root>
@@ -92,6 +153,7 @@ export function LotterySimulator() {
                   min={1}
                   value={String(currentInputs.numChannels)}
                   onValueChange={(e) => handleInputChange('numChannels', e.valueAsNumber)}
+                  disabled={isLoading}
                 />
               </Field.Root>
             </Stack>
@@ -106,6 +168,7 @@ export function LotterySimulator() {
                   min={1}
                   value={String(currentInputs.avgBallotsPerPerson)}
                   onValueChange={(e) => handleInputChange('avgBallotsPerPerson', e.valueAsNumber)}
+                  disabled={isLoading}
                 />
               </Field.Root>
               <Field.Root>
@@ -115,6 +178,7 @@ export function LotterySimulator() {
                   min={0.1}
                   value={String(currentInputs.stdDev)}
                   onValueChange={(e) => handleInputChange('stdDev', e.valueAsNumber)}
+                  disabled={isLoading}
                 />
               </Field.Root>
             </Stack>
@@ -130,6 +194,7 @@ export function LotterySimulator() {
                   max={100000}
                   value={String(currentInputs.numSimulations)}
                   onValueChange={(e) => handleInputChange('numSimulations', e.valueAsNumber)}
+                  disabled={isLoading}
                 />
               </Field.Root>
             </Stack>
@@ -144,14 +209,29 @@ export function LotterySimulator() {
                   min={1}
                   value={String(currentInputs.yourBallots)}
                   onValueChange={(e) => handleInputChange('yourBallots', e.valueAsNumber)}
+                  disabled={isLoading}
                 />
               </Field.Root>
             </Stack>
           </Fieldset.Root>
         </Box>
-        <Button type="submit" size="lg" disabled={isLoading}>
-          {isLoading ? <Spinner /> : t('lotterySimulator.form.runSimulation')}
-        </Button>
+        <HStack mt="4">
+          <Button type="submit" size="lg" disabled={isLoading}>
+            {isLoading ? (
+              <HStack>
+                <Spinner />
+                <Text>
+                  {t('lotterySimulator.form.runningSimulation')} ({simulationProgress}%)
+                </Text>
+              </HStack>
+            ) : (
+              t('lotterySimulator.form.runSimulation')
+            )}
+          </Button>
+          <Button size="lg" variant="outline" onClick={handleCancel} disabled={!isLoading}>
+            {t('lotterySimulator.form.cancelSimulation')}
+          </Button>
+        </HStack>
       </form>
 
       <Box mt="8">
@@ -282,6 +362,13 @@ export function LotterySimulator() {
                 {t('lotterySimulator.results.probabilityRateOfChange')}
               </Heading>
               <ProbabilityRateOfChangeChart data={result.probabilityRateOfChange} />
+            </Box>
+
+            <Box>
+              <Heading as="h4" size="lg" mb="2">
+                {t('lotterySimulator.results.applicantDistribution')}
+              </Heading>
+              <ApplicantDistributionChart data={result.applicantDistribution} />
             </Box>
 
             {Object.keys(result.channelAnalysis).length > 1 && (
