@@ -1,0 +1,92 @@
+{
+  "title": "Lottery Probability Simulator",
+  "description": "Simulate lottery probabilities and analyze winning chances based on various parameters.",
+  "site_name": "LotterySim",
+  "save": "Save",
+  "cancel": "Cancel",
+  "back_to_list": "Back to List",
+  "save_image": "Save Image",
+  "open_image_new_tab": "Open in New Tab",
+  "navigation": { "home": "Home" },
+  "fever_length": "Fever",
+  "seconds": "seconds",
+  "song_table": {
+    "name": "Name",
+    "description": "Description",
+    "length": "Length",
+    "normal": "NORMAL",
+    "hard": "HARD",
+    "expert": "EXPERT",
+    "master": "MASTER"
+  },
+  "footer": {
+    "created_by": "Created by",
+    "footer_text": "Oops, accidentally made it",
+    "source_code": "Feedback/ Requests are welcomed on "
+  },
+  "toast": {},
+  "error_page": {
+    "title": "Oopsie",
+    "text": "Sometimes refreshing the page fix it, Clearing the data might also fix it too. If it doesn't ping ",
+    "discord_link": "@hamp on Discord",
+    "to_fix_it": " to fix it.",
+    "copy": "Copy Error Message",
+    "reload": "Reload Page",
+    "clear": "Clear Data and Reload Page"
+  },
+  "calculator_page": {
+    "title": "Calculator",
+    "select_song_placeholder": "Select a song",
+    "open_aria_label": "open",
+    "normal_difficulty": "Normal",
+    "hard_difficulty": "Hard",
+    "expert_difficulty": "Expert",
+    "master_difficulty": "Master",
+    "combo_label": "Combo",
+    "ap_label": "AP",
+    "songs_label": "Songs"
+  },
+  "lotterySimulator": {
+    "title": "Lottery Simulator",
+    "form": {
+      "lotterySetup": "Lottery Setup",
+      "participantBehavior": "Participant Behavior",
+      "simulationControl": "Simulation Control",
+      "yourParticipation": "Your Participation",
+      "runSimulation": "Run Simulation",
+      "totalBallotsSold": "Total Ballots Sold",
+      "numberOfWinners": "Number of Winners",
+      "averageBallotsPerPerson": "Average Ballots per Person",
+      "standardDeviation": "Standard Deviation (σ)",
+      "numberOfChannels": "Number of Channels",
+      "numberOfSimulationRuns": "Number of Simulation Runs",
+      "yourBallots": "Your Ballots"
+    },
+    "results": {
+      "distributionVisualized": "Distribution Visualized",
+      "simulationResults": "Simulation Results",
+      "simulationResultsDescription": "Here are the results of your lottery simulation. The data below provides insights into the winning probabilities, winner profiles, and overall statistics based on the parameters you provided.",
+      "yourResult": "Your Result",
+      "youWon": "You won {{count}} times.",
+      "totalPeopleInPool": "Total people in pool: {{count}}",
+      "probabilityOfYourWin": "Probability of your win: {{percentage}}%",
+      "expectedWins": "Expected wins: {{count}}",
+      "lotteryOverview": "Lottery Overview",
+      "totalBallots": "Total Ballots",
+      "numberOfWinners": "Number of Winners",
+      "simulationsRun": "Simulations Run",
+      "winningChancePerBallot": "Winning Chance per Ballot",
+      "winnerProfile": "Winner Profile",
+      "winnerStatistics": "Winner Statistics",
+      "averageBallots": "Average Ballots",
+      "medianBallots": "Median Ballots",
+      "modeBallots": "Mode Ballots",
+      "probabilityOfWinning": "Probability of Winning (per person with N ballots)",
+      "probabilityRateOfChange": "Probability Rate of Change",
+      "channelAnalysis": "Channel Analysis",
+      "channel": "Channel {{index}}",
+      "yourWins": "Your wins: {{count}}",
+      "totalWinners": "Total winners: {{count}}"
+    }
+  }
+}

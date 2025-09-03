@@ -1,0 +1,27 @@
+{
+  "navigation": {
+    "home": "Home"
+  },
+  "home": {
+    "title": "Welcome",
+    "description": "This is the home page."
+  },
+  "lottery": {
+    "title": "Lottery Simulator"
+  },
+  "language": {
+    "en": "English",
+    "ja": "Japanese"
+  },
+  "colorMode": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "confirmDialog": {
+    "title": "Are you sure?",
+    "description": "This action cannot be undone.",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  }
+}

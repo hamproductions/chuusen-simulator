@@ -1,0 +1,92 @@
+{
+  "title": "抽選シミュレーター",
+  "description": "様々なパラメーターに基づいて宝くじの確率をシミュレートし、当選確率を分析します。",
+  "site_name": "抽選シム",
+  "save": "保存",
+  "cancel": "キャンセル",
+  "back_to_list": "リストに戻る",
+  "save_image": "画像を保存",
+  "open_image_new_tab": "新しいタブで開く",
+  "navigation": { "home": "ホーム" },
+  "fever_length": "フィーバー",
+  "seconds": "秒",
+  "song_table": {
+    "name": "名前",
+    "description": "説明",
+    "length": "長さ",
+    "normal": "ノーマル",
+    "hard": "ハード",
+    "expert": "エキスパート",
+    "master": "マスター"
+  },
+  "footer": {
+    "created_by": "作成者",
+    "footer_text": "うっかり作っちゃった",
+    "source_code": "フィードバック/リクエストはこちらへ "
+  },
+  "toast": {},
+  "error_page": {
+    "title": "おっと",
+    "text": "ページを更新すると直る場合があります。データをクリアすると直る場合もあります。直らない場合は ",
+    "discord_link": "Discordで@hamp",
+    "to_fix_it": " に連絡してください。",
+    "copy": "エラーメッセージをコピー",
+    "reload": "ページを再読み込み",
+    "clear": "データをクリアしてページを再読み込み"
+  },
+  "calculator_page": {
+    "title": "計算機",
+    "select_song_placeholder": "曲を選択",
+    "open_aria_label": "開く",
+    "normal_difficulty": "ノーマル",
+    "hard_difficulty": "ハード",
+    "expert_difficulty": "エキスパート",
+    "master_difficulty": "マスター",
+    "combo_label": "コンボ",
+    "ap_label": "AP",
+    "songs_label": "曲"
+  },
+  "lotterySimulator": {
+    "title": "宝くじシミュレーター",
+    "form": {
+      "lotterySetup": "宝くじ設定",
+      "participantBehavior": "参加者の行動",
+      "simulationControl": "シミュレーション制御",
+      "yourParticipation": "あなたの参加",
+      "runSimulation": "シミュレーションを実行",
+      "totalBallotsSold": "販売された総投票数",
+      "numberOfWinners": "当選者数",
+      "averageBallotsPerPerson": "一人あたりの平均投票数",
+      "standardDeviation": "標準偏差 (σ)",
+      "numberOfChannels": "チャンネル数",
+      "numberOfSimulationRuns": "シミュレーション実行回数",
+      "yourBallots": "あなたの投票数"
+    },
+    "results": {
+      "distributionVisualized": "分布の可視化",
+      "simulationResults": "シミュレーション結果",
+      "simulationResultsDescription": "宝くじシミュレーションの結果です。以下のデータは、提供されたパラメーターに基づいた当選確率、当選者プロファイル、および全体的な統計情報を提供します。",
+      "yourResult": "あなたの結果",
+      "youWon": "{{count}}回当選しました。",
+      "totalPeopleInPool": "プール内の総人数: {{count}}",
+      "probabilityOfYourWin": "あなたの当選確率: {{percentage}}%",
+      "expectedWins": "予想当選回数: {{count}}",
+      "lotteryOverview": "宝くじ概要",
+      "totalBallots": "総投票数",
+      "numberOfWinners": "当選者数",
+      "simulationsRun": "実行されたシミュレーション",
+      "winningChancePerBallot": "投票あたりの当選確率",
+      "winnerProfile": "当選者プロファイル",
+      "winnerStatistics": "当選者統計",
+      "averageBallots": "平均投票数",
+      "medianBallots": "中央値投票数",
+      "modeBallots": "最頻値投票数",
+      "probabilityOfWinning": "当選確率 (N投票あたりの人数)",
+      "probabilityRateOfChange": "当選確率の変化率",
+      "channelAnalysis": "チャンネル分析",
+      "channel": "チャンネル {{index}}",
+      "yourWins": "あなたの当選: {{count}}",
+      "totalWinners": "総当選者: {{count}}"
+    }
+  }
+}

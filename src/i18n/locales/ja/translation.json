@@ -1,0 +1,24 @@
+{
+  "navigation": {
+    "home": "ホーム"
+  },
+  "home": {
+    "title": "ようこそ",
+    "description": "これはホームページです。"
+  },
+  "language": {
+    "en": "英語",
+    "ja": "日本語"
+  },
+  "colorMode": {
+    "light": "ライト",
+    "dark": "ダーク",
+    "system": "システム"
+  },
+  "confirmDialog": {
+    "title": "本当によろしいですか？",
+    "description": "この操作は元に戻せません。",
+    "cancel": "キャンセル",
+    "confirm": "確認"
+  }
+}
